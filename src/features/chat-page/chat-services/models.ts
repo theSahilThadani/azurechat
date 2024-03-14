@@ -46,7 +46,7 @@ export interface ChatDocumentModel {
   id: string;
   name: string;
   chatThreadId: string;
-  userId: string;
+  // userId: string; not using userId because making thread common
   isDeleted: boolean;
   createdAt: Date;
   type: typeof CHAT_DOCUMENT_ATTRIBUTE;

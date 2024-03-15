@@ -6,26 +6,45 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/ui/sheet";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { ScrollArea } from "../scroll-area";
 import { useMarkdownContext } from "./markdown-context";
+import { blobFileHandler } from "@/features/blob-services/blob-file-handler";
 
 interface SliderProps {
   name: string;
   index: number;
   id: string;
+  blobPage:any;
+  blobName:any;
+  items:any;
 }
 
 export const CitationSlider: FC<SliderProps> = (props) => {
   const { onCitationClick } = useMarkdownContext();
 
-  if (!onCitationClick) throw new Error("onCitationClick is null");
+   if (!onCitationClick) throw new Error("onCitationClick is null");
 
   const [node, formAction] = useFormState(onCitationClick, null);
 
+  const [sasToken, setSasToken] = useState<string | undefined>();
+  const page = parseInt(props.items ?? "0");
+  useEffect(() => {
+    const fetchData = async () => {
+      const prop = {
+        blobName: props.blobName ?? "",
+      };
+      const sastoken = await blobFileHandler(prop);
+      setSasToken(sastoken);
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <form>
+  <div className="flex">
+      <form>
       <input type="hidden" name="id" value={props.id} />
       <Sheet>
         <SheetTrigger asChild>
@@ -34,19 +53,31 @@ export const CitationSlider: FC<SliderProps> = (props) => {
             size="sm"
             formAction={formAction}
             type="submit"
+            value={22}
           >
-            {props.index}
+            P:{page}
           </Button>
         </SheetTrigger>
-        <SheetContent className="min-w-[480px] sm:w-[540px] flex flex-col">
+        <SheetContent size="LG">
           <SheetHeader>
-            <SheetTitle>Citation</SheetTitle>
+            <SheetTitle>{props.blobName}</SheetTitle>
           </SheetHeader>
-          <ScrollArea className="flex-1 flex -mx-6">
-            <div className="px-6 whitespace-pre-wrap">{node}</div>
-          </ScrollArea>
+          {/* <div className="text-sm text-muted-foreground">{node}</div> */}
+          <div className="flex">
+            {sasToken ? (
+              <iframe
+                src={`${sasToken}#page=${page}`}
+                width="650px"
+                height="900px"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              <p>Loading...</p>
+            )}
+          </div>
         </SheetContent>
       </Sheet>
     </form>
+  </div>
   );
 };

@@ -12,6 +12,7 @@ import {
   CreateChatDocument,
 } from "../../chat-services/chat-document-service";
 import { chatStore } from "../../chat-store";
+import { UploadtoBlob } from "@/features/blob-services/blob-file-upload";
 
 class FileStore {
   public uploadButtonLabel: string = "";
@@ -29,6 +30,8 @@ class FileStore {
       const file: File | null = formData.get("file") as unknown as File;
 
       this.uploadButtonLabel = "Processing document";
+      //here we are uploading file to blob storage
+      const blobUploadDone = await UploadtoBlob(formData);
       const crackingResponse = await CrackDocument(formData);
 
       if (crackingResponse.status === "OK") {

@@ -25,8 +25,13 @@ export const CrackDocument = async (
     if (response.status === "OK") {
       const fileResponse = await LoadFile(formData);
       if (fileResponse.status === "OK") {
+        let newDocs:string[] = fileResponse.response.map((doc: any) => {
+          return `${doc.content} (page Number:"${doc.page})`;
+        });
+        
+        
         const splitDocuments = await ChunkDocumentWithOverlap(
-          fileResponse.response.join("\n")
+          newDocs.join("\n")
         );
 
         return {
@@ -53,7 +58,7 @@ export const CrackDocument = async (
 
 const LoadFile = async (
   formData: FormData
-): Promise<ServerActionResponse<string[]>> => {
+): Promise<ServerActionResponse<object[]>> => {
   try {
     const file: File | null = formData.get("file") as unknown as File;
 
@@ -72,11 +77,13 @@ const LoadFile = async (
       );
       const { paragraphs } = await poller.pollUntilDone();
 
-      const docs: Array<string> = [];
+      const docs: Array<object> = [];
 
       if (paragraphs) {
         for (const paragraph of paragraphs) {
-          docs.push(paragraph.content);
+          const content = paragraph.content;
+          const page = paragraph.boundingRegions && paragraph.boundingRegions[0];
+           docs.push({ content, page: page?.pageNumber });
         }
       }
 

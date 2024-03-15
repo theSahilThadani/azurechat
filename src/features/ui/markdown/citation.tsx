@@ -3,6 +3,7 @@ import { FC } from "react";
 import { CitationSlider } from "./citation-slider";
 
 interface Citation {
+  page: string;
   name: string;
   id: string;
 }
@@ -32,6 +33,8 @@ export const Citation: FC<Props> = (props: Props) => {
     return acc;
   }, {} as Record<string, Citation[]>);
 
+  const blobName = props.items[0].name;
+  const blobPage = props.items[0].page;
   return (
     <div className="interactive-citation p-4 border mt-4 flex flex-col rounded-md gap-2">
       {Object.entries(citations).map(([name, items], index: number) => {
@@ -43,6 +46,9 @@ export const Citation: FC<Props> = (props: Props) => {
                 return (
                   <div key={index}>
                     <CitationSlider
+                      items={item.page}
+                      blobName={blobName}
+                      blobPage={blobPage}
                       index={index + 1}
                       name={item.name}
                       id={item.id}

@@ -77,7 +77,7 @@ export const SimilaritySearch = async (
 
     const searchResults = await searchClient.search(searchText, {
       top: k,
-      // filter: filter, filter removed
+      filter: filter,
       vectorSearchOptions: {
         queries: [
           {

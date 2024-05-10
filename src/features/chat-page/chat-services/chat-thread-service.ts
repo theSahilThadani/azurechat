@@ -30,16 +30,16 @@ export const FindAllChatThreadForCurrentUser = async (): Promise<
   try {
     const querySpec: SqlQuerySpec = {
       query:
-        "SELECT * FROM root r WHERE r.type=@type  AND r.isDeleted=@isDeleted ORDER BY r.createdAt DESC",
+        "SELECT * FROM root r WHERE r.type=@type AND r.userId=@userId AND r.isDeleted=@isDeleted ORDER BY r.createdAt DESC",
       parameters: [
         {
           name: "@type",
           value: CHAT_THREAD_ATTRIBUTE,
         },
-        // {
-        //   name: "@userId",
-        //   value: await userHashedId(),
-        // },
+        {
+          name: "@userId",
+          value: await userHashedId(),
+        },
         {
           name: "@isDeleted",
           value: false,
@@ -49,7 +49,7 @@ export const FindAllChatThreadForCurrentUser = async (): Promise<
 
     const { resources } = await HistoryContainer()
       .items.query<ChatThreadModel>(querySpec, {
-        // partitionKey: await userHashedId(), No need for userid partitionKey making all thread available
+      partitionKey: await userHashedId(),
       })
       .fetchAll();
     return {
@@ -70,16 +70,16 @@ export const FindChatThreadForCurrentUser = async (
   try {
     const querySpec: SqlQuerySpec = {
       query:
-        "SELECT * FROM root r WHERE r.type=@type  AND r.id=@id AND r.isDeleted=@isDeleted",
+        "SELECT * FROM root r WHERE r.type=@type AND r.userId=@userId AND r.id=@id AND r.isDeleted=@isDeleted",
       parameters: [
         {
           name: "@type",
           value: CHAT_THREAD_ATTRIBUTE,
         },
-        // {
-        //   name: "@userId",
-        //   value: await userHashedId(),
-        // },
+        {
+          name: "@userId",
+          value: await userHashedId(),
+        },
         {
           name: "@id",
           value: id,

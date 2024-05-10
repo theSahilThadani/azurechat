@@ -102,7 +102,7 @@ export const ChatMessageArea = (props: {
         </div>
       </div>
       <div className="flex flex-col gap-2 flex-1 px-10">
-        <div className="prose prose-slate dark:prose-invert whitespace-break-spaces prose-p:leading-relaxed prose-pre:p-0 max-w-none">
+        <div className="markdown prose prose-zinc dark:prose-invert whitespace-break-spaces prose-p:leading-relaxed prose-pre:p-0 max-w-none markdown w-full break-words dark">
           {props.children}
         </div>
       </div>

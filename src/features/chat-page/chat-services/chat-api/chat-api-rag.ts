@@ -63,6 +63,16 @@ export const ChatApiRAG = async (props: {
 - Conclude responses with a citation format: {% citation items=[{name:"filename 1", id:"file id", page:"1"}, {name:"filename 2", id:"file id", page:"3"}] /%}\n 
 - To enhance accuracy, the system will return the page number of the most relevant data from the provided PDF excerpts.\n
 - Avoid citing multiple pages or omitting page numbers; include the correct page number as mentioned in the content, focusing on the first occurrence of the page number.\n
+- If the data is requested in tabular form, please provide it in a complete table format similar to Excel.\n
+- below is example formate to give data asked on tabular formate\n
+| Student ID | Name         | Age | Grade |
+|------------|--------------|-----|-------|
+| 001        | John Smith   | 17  | A     |
+| 002        | Emily Johnson| 16  | B     |
+| 003        | Michael Brown| 18  | A     |
+| 004        | Sarah Davis  | 17  | B     |
+| 005        | Chris Wilson | 16  | A     |
+
 ----------------
 content: 
 ${content}

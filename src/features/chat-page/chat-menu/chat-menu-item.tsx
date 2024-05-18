@@ -18,6 +18,8 @@ import {
   DeleteChatThreadByID,
   UpdateChatThreadTitle,
 } from "./chat-menu-service";
+import { useSession } from "next-auth/react";
+
 
 interface ChatMenuItemProps {
   href: string;
@@ -27,6 +29,7 @@ interface ChatMenuItemProps {
 
 export const ChatMenuItem: FC<ChatMenuItemProps> = (props) => {
   const path = usePathname();
+  const { data: session } = useSession();
   const { isLoading, handleAction } = useDropdownAction({
     chatThread: props.chatThread,
   });
@@ -44,7 +47,8 @@ export const ChatMenuItem: FC<ChatMenuItemProps> = (props) => {
       >
         {props.children}
       </Link>
-      <DropdownMenu>
+      {session?.user.isAdmin && (
+        <DropdownMenu>
         <DropdownMenuTrigger disabled={isLoading}>
           {isLoading ? (
             <LoadingIndicator isLoading={isLoading} />
@@ -76,6 +80,8 @@ export const ChatMenuItem: FC<ChatMenuItemProps> = (props) => {
           </DropdownMenuItemWithIcon>
         </DropdownMenuContent>
       </DropdownMenu>
+      )}
+      
     </div>
   );
 };

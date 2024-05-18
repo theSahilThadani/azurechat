@@ -22,7 +22,9 @@ type ChatTypes = "extensions" | "chat-with-file" | "multimodal";
 
 export const ChatAPIEntry = async (props: UserPrompt, signal: AbortSignal) => {
   const currentChatThreadResponse = await EnsureChatThreadOperation(props.id);
-
+  // console.log(currentChatThreadResponse)
+  // console.log(signal)
+  // console.log(props)
   if (currentChatThreadResponse.status !== "OK") {
     return new Response("", { status: 401 });
   }
@@ -44,16 +46,14 @@ export const ChatAPIEntry = async (props: UserPrompt, signal: AbortSignal) => {
   // Note that the system message will also get prepended with the extension execution steps. Please see ChatApiExtensions method.
   currentChatThread.personaMessage = `${CHAT_DEFAULT_SYSTEM_PROMPT} \n\n ${currentChatThread.personaMessage}`;
 
-  let chatType: ChatTypes = "extensions";
+  let chatType: ChatTypes = "chat-with-file";
 
   if (props.multimodalImage && props.multimodalImage.length > 0) {
     chatType = "multimodal";
   } else if (docs.length > 0) {
     chatType = "chat-with-file";
-  } else if (extension.length > 0) {
-    chatType = "extensions";
-  }
-
+  } 
+  console.log(chatType)
   // save the user message
   await CreateChatMessage({
     name: user.name,
@@ -82,14 +82,14 @@ export const ChatAPIEntry = async (props: UserPrompt, signal: AbortSignal) => {
         signal: signal,
       });
       break;
-    case "extensions":
-      runner = await ChatApiExtensions({
-        chatThread: currentChatThread,
-        userMessage: props.message,
-        history: history,
-        extensions: extension,
-        signal: signal,
-      });
+    // case "extensions":
+    //   runner = await ChatApiExtensions({
+    //     chatThread: currentChatThread,
+    //     userMessage: props.message,
+    //     history: history,
+    //     extensions: extension,
+    //     signal: signal,
+    //   });
       break;
   }
 

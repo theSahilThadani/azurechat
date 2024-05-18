@@ -74,7 +74,7 @@ export const ChatMessageArea = (props: {
           {profile}
           <div
             className={cn(
-              "text-primary capitalize items-center flex",
+              "text-primary  items-center flex",
               props.role === "function" || props.role === "tool"
                 ? "text-muted-foreground text-sm"
                 : ""

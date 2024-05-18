@@ -31,6 +31,7 @@ import {
   textToSpeechStore,
   useTextToSpeech,
 } from "./speech/use-text-to-speech";
+import { useSession } from "next-auth/react";
 
 export const ChatInput = () => {
   const { loading, input, chatThreadId } = useChat();
@@ -38,7 +39,7 @@ export const ChatInput = () => {
   const { isPlaying } = useTextToSpeech();
   const { isMicrophoneReady } = useSpeechToText();
   const { rows } = useChatInputDynamicHeight();
-
+  const { data: session } = useSession();
   const submitButton = React.useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -77,12 +78,12 @@ export const ChatInput = () => {
       />
       <ChatInputActionArea>
         <ChatInputSecondaryActionArea>
-          <AttachFile
+          {session?.user.isAdmin && <AttachFile
             onClick={(formData) =>
               fileStore.onFileChange({ formData, chatThreadId })
             }
-          />
-          <PromptSlider />
+          />}
+          {/* <PromptSlider /> not needed */} 
         </ChatInputSecondaryActionArea>
         <ChatInputPrimaryActionArea>
           <ImageInput />

@@ -175,7 +175,7 @@ export const CreateChatDocument = async (
     const modelToSave: ChatDocumentModel = {
       chatThreadId: chatThreadID,
       id: uniqueId(),
-      userId: await userHashedId(), 
+      // userId: await userHashedId(), not using userId because making thread common
       createdAt: new Date(),
       type: CHAT_DOCUMENT_ATTRIBUTE,
       isDeleted: false,

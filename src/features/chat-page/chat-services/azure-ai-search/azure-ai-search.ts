@@ -74,10 +74,10 @@ export const SimilaritySearch = async (
     });
 
     const searchClient = AzureAISearchInstance<AzureSearchDocumentIndex>();
-
+    console.log(searchText)
     const searchResults = await searchClient.search(searchText, {
       top: k,
-      filter: filter,
+      // filter: filter, filter removed
       vectorSearchOptions: {
         queries: [
           {
@@ -426,7 +426,7 @@ const CreateSearchIndex = async (): Promise<
           filterable: false,
           sortable: false,
           facetable: false,
-          vectorSearchDimensions: 1536,
+          vectorSearchDimensions: 3072,
           vectorSearchProfileName: "hnsw-vector",
         },
       ],

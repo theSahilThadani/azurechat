@@ -10,7 +10,7 @@ import { ChatMessageModel, ChatRole, MESSAGE_ATTRIBUTE } from "./models";
 
 export const FindTopChatMessagesForCurrentUser = async (
   chatThreadID: string,
-  top: number = 30
+  top: number = 25
 ): Promise<ServerActionResponse<Array<ChatMessageModel>>> => {
   try {
     const querySpec: SqlQuerySpec = {
